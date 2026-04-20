@@ -1,0 +1,449 @@
+Originally this was my code or thought process to the assignment.
+// addButton.addEventListener("click", () => {
+//     const newTask = inputField.value;//get input value
+//     userTasks.push(newTask);//add it to the array
+//     console.log("Current Tasks:");
+//     //loop through everything
+//     for(let userTask of userTasks) {//look at each item in the array
+//         console.log(userTask);//print everything
+//     }
+//     inputField.value = "";
+//     console.log("Task Added!")
+// });
+
+// //4.Display
+// for(let i = 0; i < userTasks.length; i++) {
+//     console.log(userTasks[i]);
+// }
+It would not show up on the screen, only in the console.
+Then I changed it to this:
+addButton.addEventListener('click', () => {
+    const newTask = inputField.value;//get input value
+    //only add if not empty
+    if (newTask !== "") {
+        //count how many task exist
+        let count = 0;
+        for(let i = 0; i < userTasks.length; i++) {
+            count = count + 1;
+        }
+        // Method: .push() adds the item to the end of our array
+        userTasks.push(newTask);
+
+        // Update the UI: We create the element just like before
+        for(let userTask of userTasks) {
+            const tasks = document.createElement('tasks');
+            tasks.textContent = userTask;
+            task.appendChild(tasks);
+        }
+
+        // Clear the input
+        inputField.value = "";
+
+        // Console log so students can see the "Hidden" data growing
+        console.log("Current Array:", userTasks);
+    }
+});
+This code would rerender the whole array. If I typed jump then put run, it would display jump then jumprun.
+Then I thought I finally fixed it with this.
+for (let userTask of userTasks) {
+    const tasks = document.createElement("tasks");
+    tasks.textContent = userTask;
+    task.appendChild(tasks);
+}
+
+//3. 
+addButton.addEventListener('click', () => {
+    const newTask = inputField.value;//get input value
+    //only add if not empty
+    if (newTask !== "") {
+        //count how many task exist
+        let count = 0;
+        for (let i = 0; i < userTasks.length; i++) {
+            count = count + 1;
+        }
+        // Method: .push() adds the item to the end of our array
+        userTasks.push(newTask);
+
+        // Clear the input
+        inputField.value = "";
+
+        // Console log so students can see the "Hidden" data growing
+        console.log("Current Array:", userTasks);
+    }
+});
+It only showed in the console. So I had to try again. 
+I fixed the numbers, but they only showed in the console with this code.
+for (let userTask of userTasks) {
+    const tasks = document.createElement("tasks");
+    tasks.textContent = userTask;
+    task.appendChild(tasks);
+}
+
+//3. 
+addButton.addEventListener('click', () => {
+    const newTask = inputField.value;//get input value
+    //only add if not empty
+    if (newTask !== "") {
+        //count how many task exist
+        for (let i = 0; i < userTasks.length; i++) {
+            console.log((i + 1) + ". " + userTasks[i]);
+        }
+        // Method: .push() adds the item to the end of our array
+        userTasks.push(newTask);
+
+        //Only add to the UI if the task is not a duplicate
+        const tasks = document.createElement("tasks");
+        tasks.textContent = newTask;
+        task.appendChild(tasks);
+
+        // Clear the input
+        inputField.value = "";
+
+        // Console log so students can see the "Hidden" data growing
+        console.log("Current Array:", userTasks);
+    }
+});
+I thought this fixed it, but it was duplicating the last input.
+addButton.addEventListener('click', () => {
+    const newTask = inputField.value;//get input value
+    //only add if not empty
+    if (newTask !== "") {
+        // Method: .push() adds the item to the end of our array
+        userTasks.push(newTask);
+        //the classic for loop will print a numbered list of tasks in the console
+        console.log("Numbered Task List:");
+        for (let i = 0; i < userTasks.length; i++) {
+            console.log(`${i + 1}. ${userTasks[i]}`);
+        }
+        task.innerHTML = "";
+        //When humans start a list, they start with the number one so that is what we will start with for the display
+        let index = 1;
+        //the for...of loop will show the numbered list on the webpage
+        //loop through each task in the array
+        for (let userTask of userTasks) {
+            //create a new tasks element for each task
+            const taskItem = document.createElement("div");
+            //add the number and task name as a text
+            taskItem.textContent = index + ". " + userTask;
+            //add the new element to the webpage
+            task.appendChild(taskItem);
+            //increase the number fo the next task
+            index++;
+        }
+
+        //Only add to the UI if the task is not a duplicate
+        const tasks = document.createElement("tasks");
+        tasks.textContent = newTask;
+        task.appendChild(tasks);
+
+        // Clear the input
+        inputField.value = "";
+
+        // Console log so students can see the "Hidden" data growing
+        console.log("Current Array:", userTasks);
+    }
+});
+Now this worked fine, but I wanted to change it so it would not continue to be allowed to loop with a message saying the task has been cleared.
+clearButton.addEventListener('click', () => {
+    //
+    while(userTasks.length > 0) {
+        userTasks.pop();
+    }
+    // Clear the visual list
+    task.innerHTML = "";
+    if (task.innerHTML === "") {
+        console.log("All tasks cleared from the webpage!");
+    }
+});
+This worked, but it is now stuck in a loop not showing the last message.
+//When the clear all button is clicked, this function will run
+clearButton.addEventListener('click', () => {
+    //check if the array is already empty
+    if(userTasks.length === 0) {
+        const startTask = confirm("Your list is empty. Do you want to start a new task?")
+        //if user says yes, do nothing (they can add tasks)
+    }
+    //If user says no, stop the action
+    else {
+        console.log("User chose not to start a new task")
+    }
+    //stop the function here
+    return;
+    //if the tasks do exist and the user clicks the clear button, then clear with this it will remove all tasks from the array.
+    while(userTasks.length > 0) {
+        userTasks.pop();
+    }
+    // Clear the visual list on the webpage
+    task.innerHTML = "";
+    //let the user know everthing is cleared
+    console.log("All tasks are cleared:", userTasks);
+});
+This did not work it only repeated updated array and current array.
+deleteButton.addEventListener('click', () => {
+    const taskToDelete = inputField.value;//get the task to delete from the input field.
+    // Create a new array that includes all tasks except the one to delete
+    const updatedList = [];
+    // Loop through the existing tasks and add them to the updated list if they are not the one to delete
+    for (let task of myTasks) {
+        //Test if the current task is not the one to delete
+        if (task !== taskToDelete) {
+            //Then add it to the updated list
+            updatedList.push(task);
+        }
+        else {
+            console.log(`Task "${taskToDelete}" deleted!`);
+        }
+    }
+    // Update the original task list with the updated list
+    myTasks = updatedList;
+    console.log("Updated Array:", myTasks);
+});
+This works, but it makes you type what you want to delete instead of selecting what you want to delete.
+//when the delete task button is clicked, this function will run
+deleteButton.addEventListener('click', () => {
+    const taskToDelete = inputField.value;//get the task to delete from the input field.
+    // Create a new array that includes all tasks except the one to delete
+    const updatedList = [];
+    // Loop through the existing tasks and add them to the updated list if they are not the one to delete
+    for (let task of myTasks) {
+        //Test if the current task is not the one to delete
+        if (task !== taskToDelete) {
+            //Then add it to the updated list
+            updatedList.push(task);
+        }
+    }
+    // Update the original task list with the updated list
+    myTasks = updatedList;
+    // Clear the visual list on the webpage
+    task.innerHTML = "";
+    // Display the updated list on the webpage
+    let index = 1;
+    for (let myTask of myTasks) {
+        const taskItem = document.createElement("div");
+        taskItem.textContent = index + ". " + myTask;
+        task.appendChild(taskItem);
+        index++;
+    }
+    // Clear the input box after deletion
+    inputField.value = "";
+    // Log the updated array to the console
+    console.log("Updated Array after deletion:", myTasks);
+});
+This worked, but it was a delay when the item was clicked.
+//4. Delete Specific Task Logic
+// When the Delete button is clicked, run this function
+deleteButton.addEventListener('click', () => {
+
+    // Get the task the user selected (now placed in the input box)
+    const taskToDelete = inputField.value;
+
+    // Create a new empty array to collect tasks that are NOT deleted
+    const updatedList = [];
+
+    // Look at every task in the array
+    for (let task of myTasks) {
+
+        // If the current task is NOT the one to delete
+        if (task !== taskToDelete) {
+
+            // Add it to the updated list
+            updatedList.push(task);
+        }
+    }
+
+    // Replace the old array with the updated one
+    myTasks = updatedList;
+
+    // Clear the visual list
+    task.innerHTML = "";
+
+    // Rebuild the numbered list
+    let index = 1;
+    for (let userTask of myTasks) {
+        const taskItem = document.createElement('div');
+        taskItem.textContent = index + ". " + myTasks;
+
+        // Re‑add the click‑to‑select feature
+        taskItem.addEventListener('click', () => {
+            inputField.value = userTask;
+            console.log("Selected task:", myTask);
+        });
+
+        task.appendChild(taskItem);
+        index++;
+    }
+
+    // Clear the input box
+    inputField.value = "";
+
+    // Log the updated list
+    console.log("Updated Task List:", myTasks);
+});
+Being that I changed my variables the reason it had a delay is because some of my variables were wrong.
+This is almost what I want, but it shows task deleted, before deleting anything.
+// When the Delete button is clicked, run this function
+deleteButton.addEventListener('click', () => {
+    if (myTasks.length === 0) {
+        //Tell the user the task list is empty
+        alert("Everything is already Deleted! Add a new task to start your task list!");
+        //stop the function so nothing else returns
+        return;
+    }
+
+
+    // Get the task the user selected (now placed in the input box)
+    const taskToDelete = inputField.value;
+
+
+    // Create a new empty array to collect tasks that are NOT deleted
+    const updatedList = [];
+
+    // Look at every task in the array
+    for (let myTask of myTasks) {
+
+        // If the current task is NOT the one to delete
+        if (myTask !== taskToDelete) {
+
+            // Add it to the updated list
+            updatedList.push(myTask);
+        }
+        console.log("Task deleted!");
+    }
+
+    // Replace the old array with the updated one
+    myTasks = updatedList;
+
+    // Clear the visual list
+    task.innerHTML = "";
+
+    // Rebuild the numbered list
+    let index = 1;
+    for (let myTask of myTasks) {
+        const taskItem = document.createElement('div');
+        taskItem.textContent = index + ". " + myTask;
+
+        // Re‑add the click‑to‑select feature
+        taskItem.addEventListener('click', () => {
+            inputField.value = myTask;
+            console.log("Selected task:", myTask);
+        });
+
+        task.appendChild(taskItem);
+        index++;
+    }
+
+    // Clear the input box
+    inputField.value = "";
+
+    // Log the updated list
+    console.log("Current Array:", myTasks);
+});
+This was my original html document, then one of the network of coders requested that I not use bootstrap because it is "outdated" so try tailwind.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>The Dynamic Task Manager</title>
+</head>
+<body>
+    <h1>Welcome to The Dynamic Task Manager</h1>
+    <!-- An input for the task name -->
+    <main>
+    <input type="text" id="taskInput"> <!--user types task-->
+    <!-- An "Add Task" button -->
+    <button id="addBtn">Add Task</button><!--add task-->
+    <ul id="taskList">
+        <!--<tasks> JavaScript is virtually temporarily creating the task list instead of hard coding it in html-->
+    </ul>
+    <!-- A "Delete Specific Task" button -->
+    <button id="deleteBtn">Delete Task</button><!--removes one task-->
+    <!-- A "Clear All" button -->
+    <button id="clearBtn">Clear All</button><!--removes everything-->
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+Everthing is working, but now I want to change how it shows up on the screen, by making it be a split screen.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dynamic Task Manager</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Handwriting Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+        }
+        </style>
+</head>
+<!-- Body with background and font styles -->
+<body class="bg-wood bg-cover bg-center min-h-screen p-6 font-hand">
+    <!-- Clipboard Container -->
+    <div class="max-w-md mx-auto mt-6">
+        <!-- Paper Sheet -->
+        <div class="bg-gray-100 bg-paper bg-repeat p-6 rounded-lg shadow-xl border border-gray-300">
+            <!-- Title
+            <h1 class="text-4xl font-bold text-center text-gray-800 mb-4">
+                The Dynamic Task Manager
+            </h1> -->
+            <!-- Logo -->
+            <img src="assets/images/Task-Manager-Logo.png" alt="Task Manager Logo" class="w-50 h-50 mx-auto">
+            <!-- Description -->
+            <p class="text-black-600 text-center">
+                Organize your tasks...add, delete, and clear tasks with ease! <br> How to Use: 
+            <ul class="list-disc list-inside text-center mb-4">
+                <li>To Add: Type in your task and click the "Add" button.</li>
+                <li>To Delete:
+                    <ol class="list-decimal list-inside">
+                        <li>Click the "Delete" button.</li>
+                        <li>Click the task you want to delete.</li>
+                        <li>Click the "Delete" button again to delete that task.</li>
+                    </ol>
+                <li>To Clear: Click the "Clear" button to remove all tasks.</li>
+            </ul>
+            </p>
+            <!-- Input -->
+            <input id="taskInput" type="text" placeholder="Write a task..." class="w-full p-3 border border-gray-300 rounded-lg bg-white/80
+                        focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" />
+            <!-- Buttons -->
+            <div class="flex flex-col gap-3 sm:flex-row sm:gap-2">
+                <!-- Add Button -->
+                <button id="addBtn" class="flex-1 bg-green-400 text-black-900 p-3 rounded-lg shadow 
+                            hover:bg-green-500 active:scale-95 transition">
+                    ➕ Add
+                </button>
+                <!-- Delete Button -->
+                <button id="deleteBtn" class="flex-1 bg-red-400 text-black-900 p-3 rounded-lg shadow 
+                            hover:bg-red-500 active:scale-95 transition">
+                    🗑️ Delete
+                </button>
+                <!-- Clear Button -->
+                <button id="clearBtn" class="flex-1 bg-yellow-300 text-black-900 p-3 rounded-lg shadow 
+                            hover:bg-yellow-400 active:scale-95 transition">
+                    ✨ Clear
+                </button>
+            </div>
+            <!-- Task List -->
+            <ul id="taskList" class="space-y-3 mt-6"></ul>
+        </div>
+    </div>
+<!-- Custom Script for Task Manager Functionality -->
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+In the future, I want store the users' tasks even if they refresh the page, by using localStorage. I would also like to show the message that is shown in the console on the webpage. Like "Task added! or Task completed!" I would also like to have a welcome and exit page saying, Welcome "user's name" to The Dynamic Task Manager, with all of the instructions, and when they exit the page, I want them to select done, and an exit message shows.
+
+
