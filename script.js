@@ -63,7 +63,7 @@ deleteButton.addEventListener('click', () => {
     // Check if the user has selected a task to delete
     else if (inputField.value === "") {
         //Tell the user to select a task to delete
-        alert("Please select a task to delete by clicking on it in the list!");
+        alert("Only one task can be deleted at a time. Click a task to select it, then press Delete.");
         //stop the function so nothing else returns
         console.log("");
     }
